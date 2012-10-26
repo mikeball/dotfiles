@@ -21,7 +21,7 @@
 ;; (setq inhibit-startup-echo-area-message t) 
 ;; (setq inhibit-startup-echo-area-message (user-login-name))
 ;; (setq inhibit-startup-echo-area-message "hi mike!")
-;; (message "welcome home mike") ;; displays quotes, why?
+;; (message "welcome mike") ;; displays quotes, why?
 
 
 (set-default-font "Source Code Pro-15")
@@ -53,7 +53,6 @@
 ;; (load-theme 'tango)
 
 
-
 ;;(custom-set-faces
 ;;  '(modeline ((t (:size "12pt" :background "grey"))) t))
 
@@ -62,6 +61,23 @@
 (custom-set-faces
   '(modeline ((t (:height 120 :family "Menlo" :foreground "grey20" :background "grey80"))) t))
 
+
+
+
+;; make the parenthesis less prominent in lisp source code
+(defface esk-paren-face
+   '((((class color) (background dark))
+      (:foreground "grey60"))
+     (((class color) (background light))
+      (:foreground "grey65")))
+   "Face used to dim parentheses."
+   :group 'starter-kit-faces)
+
+(font-lock-add-keywords 'emacs-lisp-mode
+                        '(("(\\|)" . 'esk-paren-face)))
+
+(font-lock-add-keywords 'clojure-mode
+                        '(("(\\|)" . 'esk-paren-face)))
 
 
  
