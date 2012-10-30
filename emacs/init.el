@@ -14,7 +14,7 @@
 
 ;; clojure
 (require 'clojure-mode)
-;; (require 'clojure-test-mode)
+;; (require 'clojure-test-mode) does not work...
 (defun turn-on-paredit () (paredit-mode 1))
 (add-hook 'clojure-mode-hook 'turn-on-paredit) ;; turn on paredit for clojure
 
