@@ -12,6 +12,8 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 alias st='open -a "Sublime Text 2"'
 alias em='open -a "Emacs"'
 
+alias flushdns='dscacheutil -flushcache'
+
 
 export BEES_HOME=~/sdk/cloudbees-sdk-0.8.1
 export PATH=$PATH:$BEES_HOME
