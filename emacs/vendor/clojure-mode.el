@@ -1,11 +1,11 @@
 ;;; clojure-mode.el --- Major mode for Clojure code
 
-;; Copyright Â© 2007-2013 Jeffrey Chu, Lennart Staflin, Phil Hagelberg
+;; Copyright © 2007-2013 Jeffrey Chu, Lennart Staflin, Phil Hagelberg
 ;;
 ;; Authors: Jeffrey Chu <jochu0@gmail.com>
 ;;          Lennart Staflin <lenst@lysator.liu.se>
 ;;          Phil Hagelberg <technomancy@gmail.com>
-;; URL: http://github.com/clojure-emacs/clojure-mode
+;; URL: http://github.com/technomancy/clojure-mode
 ;; Version: 2.1.0
 ;; Keywords: languages, lisp
 
@@ -14,20 +14,20 @@
 ;;; Commentary:
 
 ;; Provides font-lock, indentation, and navigation for the Clojure
-;; programming language (http://clojure.org).
+;; language. (http://clojure.org)
 
 ;; Users of older Emacs (pre-22) should get version 1.4:
-;; http://github.com/clojure-emacs/clojure-mode/tree/1.4
+;; http://github.com/technomancy/clojure-mode/tree/1.4
 
 ;; Slime integration has been removed; see the 1.x releases if you need it.
 
-;; Using clojure-mode with paredit is highly recommended.  Use paredit
+;; Using clojure-mode with paredit is highly recommended. Use paredit
 ;; as you would with any other minor mode; for instance:
 ;;
 ;;   ;; require or autoload paredit-mode
 ;;   (add-hook 'clojure-mode-hook 'paredit-mode)
 
-;; See nREPL.el (http://github.com/clojure-emacs/nrepl.el) for
+;; See nREPL.el (http://github.com/kingtim/nrepl.el) for
 ;; better interaction with subprocesses via nREPL.
 
 ;;; License:
@@ -49,20 +49,10 @@
 
 ;;; Code:
 
-
-;;; Compatibility
-(eval-and-compile
-  ;; `setq-local' for Emacs 24.2 and below
-  (unless (fboundp 'setq-local)
-    (defmacro setq-local (var val)
-      "Set variable VAR to value VAL in current buffer."
-      `(set (make-local-variable ',var) ,val))))
-
 (eval-when-compile
   (defvar calculate-lisp-indent-last-sexp)
   (defvar font-lock-beg)
   (defvar font-lock-end)
-  (defvar paredit-space-for-delimiter-predicates)
   (defvar paredit-version)
   (defvar paredit-mode))
 
@@ -70,7 +60,6 @@
 (require 'tramp)
 (require 'inf-lisp)
 (require 'imenu)
-(require 'easymenu)
 
 (declare-function clojure-test-jump-to-implementation  "clojure-test-mode.el")
 
@@ -151,7 +140,7 @@
         ">=" "accessor" "aclone"
         "agent" "agent-errors" "aget" "alength" "alias"
         "all-ns" "alter" "alter-meta!" "alter-var-root" "amap"
-        "ancestors" "and" "apply" "areduce" "array-map" "as->"
+        "ancestors" "and" "apply" "areduce" "array-map"
         "aset" "aset-boolean" "aset-byte" "aset-char" "aset-double"
         "aset-float" "aset-int" "aset-long" "aset-short" "assert"
         "assoc" "assoc!" "assoc-in" "associative?" "atom"
@@ -166,7 +155,7 @@
         "chunk-next" "chunk-rest" "chunked-seq?" "class" "class?"
         "clear-agent-errors" "clojure-version" "coll?" "comment" "commute"
         "comp" "comparator" "compare" "compare-and-set!" "compile"
-        "complement" "concat" "cond" "condp" "cond->" "cond->>" "conj"
+        "complement" "concat" "cond" "condp" "conj"
         "conj!" "cons" "constantly" "construct-proxy" "contains?"
         "count" "counted?" "create-ns" "create-struct" "cycle"
         "dec" "decimal?" "declare" "definline" "defmacro"
@@ -178,8 +167,8 @@
         "doto" "double" "double-array" "doubles" "drop"
         "drop-last" "drop-while" "empty" "empty?" "ensure"
         "enumeration-seq" "eval" "even?" "every?"
-        "extend" "extend-protocol" "extend-type" "extends?" "extenders" "ex-info" "ex-data"
-        "false?" "ffirst" "file-seq" "filter" "filterv" "find" "find-doc"
+        "extend" "extend-protocol" "extend-type" "extends?" "extenders"
+        "false?" "ffirst" "file-seq" "filter" "find" "find-doc"
         "find-ns" "find-var" "first" "flatten" "float" "float-array"
         "float?" "floats" "flush" "fn" "fn?"
         "fnext" "for" "force" "format" "future"
@@ -196,7 +185,7 @@
         "line-seq" "list" "list*" "list?" "load"
         "load-file" "load-reader" "load-string" "loaded-libs" "locking"
         "long" "long-array" "longs" "loop" "macroexpand"
-        "macroexpand-1" "make-array" "make-hierarchy" "map" "mapv" "map?"
+        "macroexpand-1" "make-array" "make-hierarchy" "map" "map?"
         "map-indexed" "mapcat" "max" "max-key" "memfn" "memoize"
         "merge" "merge-with" "meta" "method-sig" "methods"
         "min" "min-key" "mod" "name" "namespace"
@@ -216,17 +205,16 @@
         "pvalues" "quot" "rand" "rand-int" "range"
         "ratio?" "rational?" "rationalize" "re-find" "re-groups"
         "re-matcher" "re-matches" "re-pattern" "re-seq" "read"
-        "read-line" "read-string" "reify" "reduce" "reduce-kv" "ref" "ref-history-count"
+        "read-line" "read-string" "reify" "reduce" "ref" "ref-history-count"
         "ref-max-history" "ref-min-history" "ref-set" "refer" "refer-clojure"
         "release-pending-sends" "rem" "remove" "remove-method" "remove-ns"
         "repeat" "repeatedly" "replace" "replicate"
         "require" "reset!" "reset-meta!" "resolve" "rest"
         "resultset-seq" "reverse" "reversible?" "rseq" "rsubseq"
-        "satisfies?" "second" "select-keys" "send" "send-off" "send-via" "seq"
+        "satisfies?" "second" "select-keys" "send" "send-off" "seq"
         "seq?" "seque" "sequence" "sequential?" "set"
-        "set-agent-send-executor!" "set-agent-send-off-executor!"
         "set-validator!" "set?" "short" "short-array" "shorts"
-        "shutdown-agents" "slurp" "some" "some->" "some->>" "sort" "sort-by"
+        "shutdown-agents" "slurp" "some" "sort" "sort-by"
         "sorted-map" "sorted-map-by" "sorted-set" "sorted-set-by" "sorted?"
         "special-form-anchor" "special-symbol?" "spit" "split-at" "split-with" "str"
         "stream?" "string?" "struct" "struct-map" "subs"
@@ -241,8 +229,7 @@
         "var?" "vary-meta" "vec" "vector" "vector?"
         "when" "when-first" "when-let" "when-not" "while"
         "with-bindings" "with-bindings*" "with-in-str" "with-loading-context" "with-local-vars"
-        "with-meta" "with-open" "with-out-str" "with-precision"
-        "with-redefs" "with-redefs-fn" "xml-seq" "zipmap"
+        "with-meta" "with-open" "with-out-str" "with-precision" "xml-seq" "zipmap"
         ) t)
          "\\>")
        1 font-lock-builtin-face)
@@ -287,9 +274,9 @@
          "\\>")
        1 font-lock-type-face)
       ;; Constant values (keywords), including as metadata e.g. ^:static
-      ("\\<^?:\\(\\sw\\|\\s_\\)+\\(\\>\\|\\_>\\)" 0 font-lock-constant-face)
+      ("\\<^?:\\(\\sw\\|#\\)+\\>" 0 font-lock-constant-face)
       ;; Meta type annotation #^Type or ^Type
-      ("#?^\\(\\sw\\|\\s_\\)+" 0 font-lock-preprocessor-face)
+      ("#?^\\sw+" 0 font-lock-preprocessor-face)
       ("\\<io\\!\\>" 0 font-lock-warning-face)
 
       ;;Java interop highlighting
@@ -297,73 +284,45 @@
       ("\\<[A-Z][a-zA-Z0-9_]*[a-zA-Z0-9/$_]+\\>" 0 font-lock-preprocessor-face) ;; Foo Bar$Baz Qux_ World_OpenUDP
       ("\\<[a-zA-Z]+\\.[a-zA-Z0-9._]*[A-Z]+[a-zA-Z0-9/.$]*\\>" 0 font-lock-preprocessor-face) ;; Foo/Bar foo.bar.Baz foo.Bar/baz
       ("[a-z]*[A-Z]+[a-z][a-zA-Z0-9$]*\\>" 0 font-lock-preprocessor-face) ;; fooBar
-      ("\\<[A-Z][a-zA-Z0-9$]*\\.\\>" 0 font-lock-preprocessor-face) ;; Foo. BarBaz. Qux$Quux. Corge9.
-      ;; Highlight grouping constructs in regular expressions
-      (clojure-mode-font-lock-regexp-groups
-       (1 'font-lock-regexp-grouping-construct prepend))))
+      ("\\<[A-Z][a-zA-Z0-9$]*\\.\\>" 0 font-lock-preprocessor-face))) ;; Foo. BarBaz. Qux$Quux. Corge9.
+
+
   "Default expressions to highlight in Clojure mode.")
 
-(defgroup clojure nil
+(defgroup clojure-mode nil
   "A mode for Clojure"
-  :prefix "clojure-"
-  :group 'languages
-  :link '(url-link :tag "Github" "https://github.com/clojure-emacs/clojure-mode")
-  :link '(emacs-commentary-link :tag "Commentary" "clojure-mode"))
+  :prefix "clojure-mode-"
+  :group 'applications)
 
-(defcustom clojure-font-lock-comment-sexp nil
+(defcustom clojure-mode-font-lock-comment-sexp nil
   "Set to non-nil in order to enable font-lock of (comment...)
-forms.  This option is experimental.  Changing this will require a
+forms. This option is experimental. Changing this will require a
 restart (ie. M-x clojure-mode) of existing clojure mode buffers."
   :type 'boolean
-  :group 'clojure
-  :safe 'booleanp)
+  :group 'clojure-mode)
 
-(defcustom clojure-load-command  "(clojure.core/load-file \"%s\")\n"
+(defcustom clojure-mode-load-command  "(clojure.core/load-file \"%s\")\n"
   "*Format-string for building a Clojure expression to load a file.
 This format string should use `%s' to substitute a file name
 and should result in a Clojure expression that will command the inferior
 Clojure to load that file."
   :type 'string
-  :group 'clojure
-  :safe 'stringp)
+  :group 'clojure-mode)
 
-(defcustom clojure-inf-lisp-command "lein repl"
+(defcustom clojure-mode-inf-lisp-command "lein repl"
   "The command used by `inferior-lisp-program'."
   :type 'string
-  :group 'clojure
-  :safe 'stringp)
+  :group 'clojure-mode)
 
-(defcustom clojure-defun-style-default-indent nil
-  "Default indenting of function and macro forms using defun rules unless
-otherwise defined via `put-clojure-indent`, `define-clojure-indent`, etc."
-  :type 'boolean
-  :group 'clojure
-  :safe 'booleanp)
-
-(defcustom clojure-use-backtracking-indent t
+(defcustom clojure-mode-use-backtracking-indent t
   "Set to non-nil to enable backtracking/context sensitive indentation."
   :type 'boolean
-  :group 'clojure
-  :safe 'booleanp)
+  :group 'clojure-mode)
 
 (defcustom clojure-max-backtracking 3
   "Maximum amount to backtrack up a list to check for context."
   :type 'integer
-  :group 'clojure
-  :safe 'integerp)
-
-(defcustom clojure-omit-space-between-tag-and-delimiters (list ?\[ ?\{)
-  "List of opening delimiter characters allowed to appear
-immediately after a reader literal tag with no space, as
-in :db/id[:db.part/user]"
-  :type '(set (const :tag "[" ?\[)
-              (const :tag "{" ?\{)
-              (const :tag "(" ?\()
-              (const :tag "\"" ?\"))
-  :group 'clojure
-  :safe (lambda (value)
-          (and (listp value)
-               (every characterp value))))
+  :group 'clojure-mode)
 
 (defvar clojure-mode-map
   (let ((map (make-sparse-keymap)))
@@ -376,24 +335,8 @@ in :db/id[:db.part/user]"
     (define-key map (kbd "C-c C-t") 'clojure-jump-between-tests-and-code)
     (define-key map (kbd "C-c C-z") 'clojure-display-inferior-lisp-buffer)
     (define-key map (kbd "C-c M-q") 'clojure-fill-docstring)
-    (define-key map (kbd "C-:") 'clojure-toggle-keyword-string)
     map)
-  "Keymap for Clojure mode.  Inherits from `lisp-mode-shared-map'.")
-
-(easy-menu-define clojure-mode-menu clojure-mode-map
-  "Menu for Clojure mode."
-  '("Clojure"
-    ["Eval Function Definition" lisp-eval-defun]
-    ["Eval Last Sexp" lisp-eval-last-sexp]
-    ["Eval Region" lisp-eval-region]
-    "--"
-    ["Run Inferior Lisp" clojure-display-inferior-lisp-buffer]
-    ["Display Inferior Lisp Buffer" clojure-display-inferior-lisp-buffer]
-    ["Load File" clojure-load-file]
-    "--"
-    ["Toggle between string & keyword" clojure-toggle-keyword-string]
-    ["Fill Docstring" clojure-fill-docstring]
-    ["Jump Between Test and Code" clojure-jump-between-tests-and-code]))
+  "Keymap for Clojure mode. Inherits from `lisp-mode-shared-map'.")
 
 (defvar clojure-mode-syntax-table
   (let ((table (copy-syntax-table emacs-lisp-mode-syntax-table)))
@@ -406,9 +349,12 @@ in :db/id[:db.part/user]"
     (modify-syntax-entry ?\[ "(]" table)
     (modify-syntax-entry ?\] ")[" table)
     (modify-syntax-entry ?^ "'" table)
-    ;; Make hash a usual word character
-    (modify-syntax-entry ?# "_ p" table)
     table))
+
+(defvar clojure-mode-abbrev-table nil
+  "Abbrev table used in clojure-mode buffers.")
+
+(define-abbrev-table 'clojure-mode-abbrev-table ())
 
 (defvar clojure-prev-l/c-dir/file nil
   "Record last directory and file used in loading or compiling.
@@ -424,7 +370,7 @@ numbers count from the end:
   leiningen.compile -> leiningen.test.compile (uses 1)
   clojure.http.client -> clojure.http.test.client (uses -1)")
 
-(defconst clojure-mode-version "2.1.0"
+(defvar clojure-mode-version "2.1.0"
   "The current version of `clojure-mode'.")
 
 (defun clojure-mode-display-version ()
@@ -435,39 +381,6 @@ numbers count from the end:
 ;; For compatibility with Emacs < 24, derive conditionally
 (defalias 'clojure-parent-mode
   (if (fboundp 'prog-mode) 'prog-mode 'fundamental-mode))
-
-(defun clojure-space-for-delimiter-p (endp delim)
-  (if (eq major-mode 'clojure-mode)
-      (save-excursion
-        (backward-char)
-        (if (and (or (char-equal delim ?\()
-                     (char-equal delim ?\")
-                     (char-equal delim ?{))
-                 (not endp))
-            (if (char-equal (char-after) ?#)
-                (and (not (bobp))
-                     (or (char-equal ?w (char-syntax (char-before)))
-                         (char-equal ?_ (char-syntax (char-before)))))
-              t)
-          t))
-    t))
-
-(defun clojure-no-space-after-tag (endp delimiter)
-  "Do not insert a space between a reader-literal tag and an
-  opening delimiter in the list
-  clojure-omit-space-between-tag-and-delimiters. Allows you to
-  write things like #db/id[:db.part/user] without inserting a
-  space between the tag and the opening bracket."
-  (if endp
-      t
-    (or (not (member delimiter clojure-omit-space-between-tag-and-delimiters))
-        (save-excursion
-          (let ((orig-point (point)))
-            (not (and (re-search-backward
-                       "#\\([a-zA-Z0-9._-]+/\\)?[a-zA-Z0-9._-]+"
-                       (line-beginning-position)
-                       t)
-                      (= orig-point (match-end 0)))))))))
 
 ;;;###autoload
 (define-derived-mode clojure-mode clojure-parent-mode "Clojure"
@@ -481,30 +394,29 @@ or to switch back to an existing one.
 
 Entry to this mode calls the value of `clojure-mode-hook'
 if that value is non-nil."
-  (setq-local imenu-create-index-function
-              (lambda ()
-                (imenu--generic-function '((nil clojure-match-next-def 0)))))
-  (setq-local indent-tabs-mode nil)
+  (set (make-local-variable 'imenu-create-index-function)
+       (lambda ()
+         (imenu--generic-function '((nil clojure-match-next-def 0)))))
+  (set (make-local-variable 'indent-tabs-mode) nil)
   (lisp-mode-variables nil)
-  (setq-local comment-start-skip
-              "\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *")
-  (setq-local lisp-indent-function 'clojure-indent-function)
+  (set (make-local-variable 'comment-start-skip)
+       "\\(\\(^\\|[^\\\\\n]\\)\\(\\\\\\\\\\)*\\)\\(;+\\|#|\\) *")
+  (set (make-local-variable 'lisp-indent-function)
+       'clojure-indent-function)
   (when (< emacs-major-version 24)
-    (setq-local forward-sexp-function 'clojure-forward-sexp))
-  (setq-local lisp-doc-string-elt-property 'clojure-doc-string-elt)
-  (setq-local inferior-lisp-program clojure-inf-lisp-command)
-  (setq-local parse-sexp-ignore-comments t)
+    (set (make-local-variable 'forward-sexp-function)
+         'clojure-forward-sexp))
+  (set (make-local-variable 'lisp-doc-string-elt-property)
+       'clojure-doc-string-elt)
+  (set (make-local-variable 'inferior-lisp-program) clojure-mode-inf-lisp-command)
+  (set (make-local-variable 'parse-sexp-ignore-comments) t)
 
   (clojure-mode-font-lock-setup)
   (add-hook 'paredit-mode-hook
             (lambda ()
               (when (>= paredit-version 21)
                 (define-key clojure-mode-map "{" 'paredit-open-curly)
-                (define-key clojure-mode-map "}" 'paredit-close-curly)
-                (add-to-list 'paredit-space-for-delimiter-predicates
-                             'clojure-space-for-delimiter-p)
-                (add-to-list 'paredit-space-for-delimiter-predicates
-                             'clojure-no-space-after-tag)))))
+                (define-key clojure-mode-map "}" 'paredit-close-curly)))))
 
 (defun clojure-display-inferior-lisp-buffer ()
   "Display a buffer bound to `inferior-lisp-buffer'."
@@ -514,7 +426,7 @@ if that value is non-nil."
       (run-lisp inferior-lisp-program)))
 
 (defun clojure-load-file (file-name)
-  "Load a Clojure file FILE-NAME into the inferior Clojure process."
+  "Load a Lisp file into the inferior Lisp process."
   (interactive (comint-get-source "Load Clojure file: "
                                   clojure-prev-l/c-dir/file
                                   '(clojure-mode) t))
@@ -522,13 +434,13 @@ if that value is non-nil."
   (setq clojure-prev-l/c-dir/file (cons (file-name-directory file-name)
                                         (file-name-nondirectory file-name)))
   (comint-send-string (inferior-lisp-proc)
-                      (format clojure-load-command file-name))
+                      (format clojure-mode-load-command file-name))
   (switch-to-lisp t))
 
 
 
 (defun clojure-match-next-def ()
-  "Scans the buffer backwards for the next top level definition.
+  "Scans the buffer backwards for the next top-level definition.
 Called by `imenu--generic-function'."
   (when (re-search-backward "^\\s *(def\\S *[ \n\t]+" nil t)
     (save-excursion
@@ -541,17 +453,17 @@ Called by `imenu--generic-function'."
 (defun clojure-mode-font-lock-setup ()
   "Configures font-lock for editing Clojure code."
   (interactive)
-  (setq-local font-lock-multiline t)
+  (set (make-local-variable 'font-lock-multiline) t)
   (add-to-list 'font-lock-extend-region-functions
                'clojure-font-lock-extend-region-def t)
 
-  (when clojure-font-lock-comment-sexp
+  (when clojure-mode-font-lock-comment-sexp
     (add-to-list 'font-lock-extend-region-functions
                  'clojure-font-lock-extend-region-comment t)
     (make-local-variable 'clojure-font-lock-keywords)
     (add-to-list 'clojure-font-lock-keywords
                  'clojure-font-lock-mark-comment t)
-    (setq-local open-paren-in-column-0-is-defun-start nil))
+    (set (make-local-variable 'open-paren-in-column-0-is-defun-start) nil))
 
   (setq font-lock-defaults
         '(clojure-font-lock-keywords    ; keywords
@@ -564,9 +476,9 @@ Called by `imenu--generic-function'."
 
 (defun clojure-font-lock-def-at-point (point)
   "Find the position range between the top-most def* and the
-fourth element afterwards using POINT.  Note that this means there's no
-guarantee of proper font locking in def* forms that are not at
-top level."
+fourth element afterwards. Note that this means there's no
+gaurantee of proper font locking in def* forms that are not at
+top-level."
   (goto-char point)
   (condition-case nil
       (beginning-of-defun)
@@ -605,54 +517,19 @@ elements of a def* forms."
                   changed t)))))
     changed))
 
-(defun clojure-mode-font-lock-regexp-groups (bound)
-  "Highlight grouping constructs in regular expression.
-
-BOUND denotes the maximum number of characters (relative to the point) to check."
-  (catch 'found
-    (while (re-search-forward (concat
-                               ;; A group may start using several alternatives:
-                               "\\(\\(?:"
-                               ;; 1. (? special groups
-                               "(\\?\\(?:"
-                               ;; a) non-capturing group (?:X)
-                               ;; b) independent non-capturing group (?>X)
-                               ;; c) zero-width positive lookahead (?=X)
-                               ;; d) zero-width negative lookahead (?!X)
-                               "[:=!>]\\|"
-                               ;; e) zero-width positive lookbehind (?<=X)
-                               ;; f) zero-width negative lookbehind (?<!X)
-                               "<[=!]\\|"
-                               ;; g) named capturing group (?<name>X)
-                               "<[[:alnum:]]+>"
-                               "\\)\\|" ;; end of special groups
-                               ;; 2. normal capturing groups (
-                               ;; 3. we also highlight alternative
-                               ;; separarators |, and closing parens )
-                               "[|()]"
-                               "\\)\\)") bound t)
-      (let ((face (get-text-property (1- (point)) 'face)))
-        (when (and (or (and (listp face)
-                            (memq 'font-lock-string-face face))
-                       (eq 'font-lock-string-face face))
-                   (clojure-string-start t))
-          (throw 'found t))))))
-
 (defun clojure-find-block-comment-start (limit)
-  "Search for (comment...) or #_ style block comments.
-Places point at the beginning of the expression.
-
-LIMIT denotes the maximum number of characters (relative to the point) to check."
+  "Search for (comment...) or #_ style block comments and put
+  point at the beginning of the expression."
   (let ((pos (re-search-forward "\\((comment\\>\\|#_\\)" limit t)))
     (when pos
       (forward-char (- (length (match-string 1))))
       pos)))
 
 (defun clojure-font-lock-extend-region-comment ()
-  "Move fontification boundaries to always contain entire (comment ..) and #_ sexp.
-
-Does not work if you have a  whitespace between ( and comment, but that is omitted to make
-this run faster."
+  "Move fontification boundaries to always contain
+  entire (comment ..) and #_ sexp. Does not work if you have a
+  white-space between ( and comment, but that is omitted to make
+  this run faster."
   (let ((changed nil))
     (goto-char font-lock-beg)
     (condition-case nil (beginning-of-defun) (error nil))
@@ -668,9 +545,7 @@ this run faster."
     changed))
 
 (defun clojure-font-lock-mark-comment (limit)
-  "Mark all (comment ..) and #_ forms with `font-lock-comment-face'.
-
-LIMIT denotes the maximum number of characters (relative to the point) to check."
+  "Marks all (comment ..) and #_ forms with font-lock-comment-face."
   (let (pos)
     (while (and (< (point) limit)
                 (setq pos (clojure-find-block-comment-start limit)))
@@ -769,9 +644,6 @@ This function also returns nil meaning don't specify the indentation."
                (goto-char open-paren)
                (1+ (current-column)))
               ((or (eq method 'defun)
-                   (and clojure-defun-style-default-indent
-                        ;; largely to preserve useful alignment of :require, etc in ns
-                        (not (string-match "^:" function)))
                    (and (null method)
                         (> (length function) 3)
                         (string-match "\\`\\(?:\\S +/\\)?\\(def\\|with-\\)"
@@ -783,14 +655,13 @@ This function also returns nil meaning don't specify the indentation."
                                      indent-point normal-indent))
               (method
                (funcall method indent-point state))
-              (clojure-use-backtracking-indent
+              (clojure-mode-use-backtracking-indent
                (clojure-backtracking-indent
                 indent-point state normal-indent)))))))
 
 (defun clojure-backtracking-indent (indent-point state normal-indent)
-  "Experimental backtracking support.
-
-Will upwards in an sexp to check for contextual indenting."
+  "Experimental backtracking support. Will upwards in an sexp to
+check for contextual indenting."
   (let (indent (path) (depth 0))
     (goto-char (elt state 1))
     (while (and (not indent)
@@ -865,7 +736,7 @@ get emacs to indent your own macros the same as it does the
 built-ins like with-open. To set manually from lisp code,
 use (put-clojure-indent 'some-symbol 'defun)."
   :type '(repeat symbol)
-  :group 'clojure
+  :group 'clojure-mode
   :set 'add-custom-clojure-indents)
 
 (define-clojure-indent
@@ -926,7 +797,6 @@ use (put-clojure-indent 'some-symbol 'defun)."
   ;; clojure.test
   (testing 1)
   (deftest 'defun)
-  (are 1)
   (use-fixtures 'defun))
 
 
@@ -937,23 +807,14 @@ use (put-clojure-indent 'some-symbol 'defun)."
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun clojure-string-start (&optional regex)
-  "Return the position of the \" that begins the string at point.
-If REGEX is non-nil, return the position of the # that begins
-the regex at point.  If point is not inside a string or regex,
-return nil."
-  (when (nth 3 (syntax-ppss)) ;; Are we really in a string?
-    (save-excursion
-      (save-match-data
-        ;; Find a quote that appears immediately after whitespace,
-        ;; beginning of line, hash, or an open paren, brace, or bracket
-        (re-search-backward "\\(\\s-\\|^\\|#\\|(\\|\\[\\|{\\)\\(\"\\)")
-        (let ((beg (match-beginning 2)))
-          (when beg
-            (if regex
-                (and (char-equal ?# (char-before beg)) (1- beg))
-              (when (not (char-equal ?# (char-before beg)))
-                beg))))))))
+(defun clojure-string-start ()
+  "Return the position of the \" that begins the string at point."
+  (save-excursion
+    (save-match-data
+      ;; Find a quote that appears immediately after whitespace,
+      ;; beginning of line, or an open paren, brace, or bracket
+      (re-search-backward "\\(\\s-\\|^\\|(\\|\\[\\|{\\)\\(\"\\)")
+      (match-beginning 2))))
 
 (defun clojure-char-at-point ()
   "Return the char at point or nil if at buffer end."
@@ -1000,42 +861,14 @@ returned."
   (forward-char)
   (set-mark (clojure-string-end)))
 
-(defun clojure-toggle-keyword-string ()
-  "Convert the string or keyword at (point) from string->keyword or keyword->string."
-  (interactive)
-  (let* ((original-point (point)))
-    (while (and (> (point) 1)
-                (not (equal "\"" (buffer-substring-no-properties (point) (+ 1 (point)))))
-                (not (equal ":" (buffer-substring-no-properties (point) (+ 1 (point))))))
-      (backward-char))
-    (cond
-     ((equal 1 (point))
-      (message "beginning of file reached, this was probably a mistake."))
-     ((equal "\"" (buffer-substring-no-properties (point) (+ 1 (point))))
-      (insert ":" (substring (clojure-delete-and-extract-sexp) 1 -1)))
-     ((equal ":" (buffer-substring-no-properties (point) (+ 1 (point))))
-      (insert "\"" (substring (clojure-delete-and-extract-sexp) 1) "\"")))
-    (goto-char original-point)))
-
-(defun clojure-delete-and-extract-sexp ()
-  "Delete the sexp and return it."
-  (interactive)
-  (let* ((begin (point)))
-    (forward-sexp)
-    (let* ((result (buffer-substring-no-properties begin (point))))
-      (delete-region begin (point))
-      result)))
-
-(defvar clojure-docstring-indent-level 2)
-
-(defun clojure-fill-docstring ()
+(defun clojure-fill-docstring (&optional argument)
   "Fill the definition that the point is on appropriate for Clojure.
 
-Fills so that every paragraph has a minimum of two initial spaces,
-with the exception of the first line.  Fill margins are taken from
-paragraph start, so a paragraph that begins with four spaces will
-remain indented by four spaces after refilling."
-  (interactive)
+  Fills so that every paragraph has a minimum of two initial spaces,
+  with the exception of the first line. Fill margins are taken from
+  paragraph start, so a paragraph that begins with four spaces will
+  remain indented by four spaces after refilling."
+  (interactive "P")
   (if (and (fboundp 'paredit-in-string-p) paredit-mode)
       (unless (paredit-in-string-p)
         (error "Must be inside a string")))
@@ -1044,28 +877,25 @@ remain indented by four spaces after refilling."
   (let ((old-point (point)))
     (save-restriction
       (save-excursion
-        (let* ((clojure-fill-column fill-column)
-               (string-region (clojure-docstring-start+end-points))
-               (string-start (car string-region))
+        (let* ((string-region (clojure-docstring-start+end-points))
+               (string-start (1+ (car string-region)))
                (string-end (cdr string-region))
-               (string (buffer-substring-no-properties string-start
-                                                       string-end)))
+               (string (buffer-substring-no-properties (1+ (car string-region))
+                                                       (cdr string-region))))
           (delete-region string-start string-end)
           (insert
            (with-temp-buffer
              (insert string)
-             (let ((left-margin clojure-docstring-indent-level))
+             (let ((left-margin 2))
                (delete-trailing-whitespace)
-               (setq fill-column clojure-fill-column)
                (fill-region (point-min) (point-max))
-               (buffer-substring-no-properties (+ clojure-docstring-indent-level (point-min)) (point-max))))))))
+               (buffer-substring-no-properties (+ 2 (point-min)) (point-max))))))))
     (goto-char old-point)))
 
 
 
 (defconst clojure-namespace-name-regex
   (rx line-start
-      (zero-or-more whitespace)
       "("
       (zero-or-one (group (regexp "clojure.core/")))
       (zero-or-one (submatch "in-"))
@@ -1109,30 +939,21 @@ remain indented by four spaces after refilling."
 
 
 (defun clojure-expected-ns ()
-  "Return the namespace name that the file should have."
+  "Returns the namespace name that the file should have."
   (let* ((project-dir (file-truename
                        (locate-dominating-file default-directory
                                                "project.clj")))
-         (relative (substring (file-truename (buffer-file-name))
-                              (length project-dir)
-                              (- (length (file-name-extension (buffer-file-name) t))))))
+         (relative (substring (file-truename (buffer-file-name)) (length project-dir) -4)))
     (replace-regexp-in-string
      "_" "-" (mapconcat 'identity (cdr (split-string relative "/")) "."))))
 
-(defun clojure-insert-ns-form-at-point ()
-  "Insert a namespace form at point."
-  (interactive)
-  (insert (format "(ns %s)" (clojure-expected-ns))))
-
 (defun clojure-insert-ns-form ()
-  "Insert a namespace form at the beginning of the buffer."
   (interactive)
   (goto-char (point-min))
-  (clojure-insert-ns-form-at-point))
+  (insert (format "(ns %s)" (clojure-expected-ns))))
 
 (defun clojure-update-ns ()
-  "Update the namespace of the current buffer.
-Useful if a file has been renamed."
+  "Updates the namespace of the current buffer. Useful if a file has been renamed."
   (interactive)
   (let ((nsname (clojure-expected-ns)))
     (when nsname
@@ -1144,7 +965,6 @@ Useful if a file has been renamed."
               (error "Namespace not found"))))))))
 
 (defun clojure-find-ns ()
-  "Find the namespace of the current Clojure buffer."
   (let ((regexp clojure-namespace-name-regex))
     (save-restriction
       (save-excursion
@@ -1156,19 +976,14 @@ Useful if a file has been renamed."
 
 ;; Test navigation:
 (defun clojure-in-tests-p ()
-  "Check whether the current file is a test file.
-
-Two checks are made - whether the namespace of the file has the
-word test in it and whether the file lives under the test/ directory."
   (or (string-match-p "test\." (clojure-find-ns))
       (string-match-p "/test" (buffer-file-name))))
 
 (defun clojure-underscores-for-hyphens (namespace)
-  "Replace all hyphens in NAMESPACE with underscores."
   (replace-regexp-in-string "-" "_" namespace))
 
 (defun clojure-test-for (namespace)
-  "Return the path of the test file for the given NAMESPACE."
+  "Returns the path of the test file for the given namespace."
   (let* ((namespace (clojure-underscores-for-hyphens namespace))
          (segments (split-string namespace "\\.")))
     (format "%stest/%s_test.clj"
@@ -1177,7 +992,8 @@ word test in it and whether the file lives under the test/ directory."
             (mapconcat 'identity segments "/"))))
 
 (defvar clojure-test-for-fn 'clojure-test-for
-  "The function that will return the full path of the Clojure test file for the given namespace.")
+  "Var pointing to the function that will return the full path of the
+Clojure test file for the given namespace.")
 
 (defun clojure-jump-to-test ()
   "Jump from implementation file to test."
@@ -1185,7 +1001,6 @@ word test in it and whether the file lives under the test/ directory."
   (find-file (funcall clojure-test-for-fn (clojure-find-ns))))
 
 (defun clojure-jump-between-tests-and-code ()
-  "Jump between implementation and related test file."
   (interactive)
   (if (clojure-in-tests-p)
       (clojure-test-jump-to-implementation)
@@ -1193,10 +1008,10 @@ word test in it and whether the file lives under the test/ directory."
 
 ;;;###autoload
 (progn
+  (put 'clojure-test-ns-segment-position 'safe-local-variable 'integerp)
+  (put 'clojure-mode-load-command 'safe-local-variable 'stringp)
+
   (add-to-list 'auto-mode-alist '("\\.clj\\'" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljs\\'" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.dtm\\'" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.edn\\'" . clojure-mode))
   (add-to-list 'interpreter-mode-alist '("jark" . clojure-mode))
   (add-to-list 'interpreter-mode-alist '("cake" . clojure-mode)))
 

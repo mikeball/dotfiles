@@ -17,11 +17,11 @@
 (setq initial-scratch-message ";; scratch \n\n")
 
 ;; hide minibuffer spash message
-;; for some reason these items are don't work
-;; (setq inhibit-startup-echo-area-message t) 
-;; (setq inhibit-startup-echo-area-message (user-login-name))
-;; (setq inhibit-startup-echo-area-message "hi mike!")
-;; (message "welcome mike") ;; displays quotes, why?
+(setq inhibit-startup-echo-area-message 'wecome)
+
+;; (setq inhibit-startup-screen t)
+
+
 
 
 (set-default-font "Source Code Pro-15")

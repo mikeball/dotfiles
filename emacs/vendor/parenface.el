@@ -1,6 +1,7 @@
 ;;; parenface.el --- Provide a face for parens in lisp modes.
-;; By Dave Pearson <davep@davep.org>
-;; $Revision: 1.1 $
+
+;; Author: Dave Pearson <davep@davep.org>
+;; Version: 1.1
 
 ;; Add a paren-face to emacs and add support for it to the various lisp modes.
 ;;
@@ -35,4 +36,4 @@
 
 (provide 'parenface)
 
-;; parenface.el ends here
+;;; parenface.el ends here
