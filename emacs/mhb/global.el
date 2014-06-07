@@ -12,3 +12,6 @@
 ;; (setq make-backup-files nil) ; stop creating those backup~ files
 (setq auto-save-default nil) ; stop creating those #autosave# files
 
+
+;; turn off the end of buffer bell sound, it's much too loud
+(setq ring-bell-function 'ignore)

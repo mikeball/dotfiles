@@ -69,7 +69,7 @@
    '((((class color) (background dark))
       (:foreground "grey60"))
      (((class color) (background light))
-      (:foreground "grey65")))
+      (:foreground "grey55")))
    "Face used to dim parentheses."
    :group 'starter-kit-faces)
 

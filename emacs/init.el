@@ -1,46 +1,85 @@
 (add-to-list 'load-path "~/.emacs.d/mhb")
+
 (load "global")
 (load "interface")
 (load "bindings")
 
 
 
-(add-to-list 'load-path "~/.emacs.d/vendor")
 
 
-;; for aquamacs we must import package
-; (require 'package)
-; (add-to-list 'package-archives
-;              '("melpa" . "http://melpa.milkbox.net/packages/") t)
-; (package-initialize)
+; setup package manager
+(require 'package)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
+; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-
-
+(package-initialize)
 
 
 
-;; enable paredit
-(require 'paredit)
-(show-paren-mode t) ;; must be able to see matching parens!
+(defvar my-packages '(paredit
+                      clojure-mode
+                      ; clojure-test-mode
+                      cider))
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
 
 
-;; clojure
-(require 'clojure-mode)
-(require 'clojure-test-mode)
-(defun turn-on-paredit () (paredit-mode 1))
-(add-hook 'clojure-mode-hook 'turn-on-paredit) ;; turn on paredit for clojure
+
+
+; show matching parens!
+(show-paren-mode t) 
+
+; turn on paredit for clojure
+(add-hook 'clojure-mode-hook 'paredit-mode)
+
+
+
+
+
+
+
+
+
+;; clojure-mode
+; (unless (package-installed-p 'clojure-mode)
+;   (package-install 'clojure-mode))
+
+; (add-hook 'clojure-mode-hook 'paredit-mode)
+
+;; previous method of enabling paredit in clojure-mode
+; (require 'clojure-mode)
+
+; (defun enable-paredit () (paredit-mode 1)) ; paredit with bracket highlighting?
+; (add-hook 'clojure-mode-hook 'enable-paredit) 
+
+
+;; never could get test-mode working...
+; (require 'clojure-test-mode)
+
+
+
+;; install cider
+; (unless (package-installed-p 'cider)
+;   (package-install 'cider))
+
 
 
 
 
 ;; clojure nrepl
-(require 'nrepl)
-(add-hook 'nrepl-interaction-mode-hook
-    'nrepl-turn-on-eldoc-mode)
-    ;; (setq nrepl-popup-stacktraces nil) ;; disable exception buffer popup?? not working...
-    (add-to-list 'same-window-buffer-names "*nrepl*")
+; (require 'nrepl)
+; (add-hook 'nrepl-interaction-mode-hook
+;     'nrepl-turn-on-eldoc-mode)
+;     ;; (setq nrepl-popup-stacktraces nil) ;; disable exception buffer popup?? not working...
+;     (add-to-list 'same-window-buffer-names "*nrepl*")
+
+
+
 
 
 ;; enable cljs sytax highlighting

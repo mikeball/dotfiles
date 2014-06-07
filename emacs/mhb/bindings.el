@@ -21,8 +21,8 @@
 ; easier alt-x
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 
-; delete entire words
-(global-set-key "\C-w" 'backward-kill-word)
+; delete entire words... does not work well with paredit, use m-delete from clojure mode instead
+; (global-set-key "\C-w" 'backward-kill-word)
 
 ;; single letter yes/no answers
 (defalias 'yes-or-no-p 'y-or-n-p)
