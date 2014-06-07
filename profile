@@ -1,19 +1,16 @@
 # add local bin to path
 export PATH=~/bin:$PATH
+export VAGRANT_HOME=/Volumes/Storage/Machines/.vagrant.d
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad
-
-alias st='open -a "Sublime Text 2"'
+# editor shortcuts
+alias st='open -a "Sublime Text"'
+alias am='open -a "Aquamacs"'
 alias em='open -a "Emacs"'
-alial am='open -a "Aquamacs"'
+alias lt='open -a "LightTable"'
+
+# command shortcuts
 alias flushdns='dscacheutil -flushcache'
 
-
-# export BEES_HOME=~/sdk/cloudbees-sdk-0.8.1
-# export PATH=$PATH:$BEES_HOME
-
-#test
+# better colors
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
