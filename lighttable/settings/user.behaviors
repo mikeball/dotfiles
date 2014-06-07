@@ -1,0 +1,44 @@
+;; User behaviors
+;; -----------------------------
+;; Behaviors are stored as a set of diffs that are merged together
+;; to create the final set of functionality that makes up Light Table. You can
+;; modify these diffs to either add or subtract functionality.
+;;
+;; Behaviors are added to tags, objects with those tags then automatically gain
+;; whatever logic the behavior imparts. To see a list of user-level behaviors,
+;; start typing a word related to the functionality you want in between the square
+;; brackets (e.g. "theme").
+
+{:+ {
+     ;; The app tag is kind of like global scope. You assign behaviors that affect
+     ;; all of Light Table here
+     :app [(:lt.objs.style/set-skin "tonic")
+
+           ; obviously hides the left side folder tree on startup
+           (:lt.objs.sidebar.workspace/workspace.open-on-start)
+
+
+           ; potential way to configure the background image?
+           ; (:lt.plugins.tonic/background-image "somesite.com/my-image.jpg")
+
+           ; another way to handle settings for each plugin?
+           ; the file path with maps to /settings/plugins/tonic/my-image.jpg
+           ; (:lt.plugins.tonic/settings {:background-image "/my-image.jpg"})
+
+           ]
+
+     ;; The editor tag is applied to all editors
+     :editor [:lt.objs.editor/no-wrap
+             (:lt.objs.style/set-theme "tonic")
+             (:lt.objs.style/font-settings "Source Code Pro" 13 1.2)]
+
+     ;; Here we can add behaviors to just clojure editors
+     :editor.clojure [(:lt.objs.langs.clj/print-length 1000)
+                       :lt.plugins.rainbow/hide-rainbow-parens]}
+
+ ;; You can use the subtract key to remove behavior that may get added by
+ ;; another diff
+
+ :- {:app [:lt.objs.intro/show-intro]
+     :tabset.tab [:lt.objs.tabs/show-close-button]}}
+
