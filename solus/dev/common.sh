@@ -1,5 +1,7 @@
 
+# install google chrome(dev) - use third party
 
+# install fonts source code pro
 
 
 
@@ -22,3 +24,11 @@ ln -s ~/.dotfiles/spacemacs/dotspacemacs.el ~/.spacemacs
 # use spacemacs logo in .emacs.d/assets/spacemacs.svg
 
 
+
+
+
+# install remote desktop
+sudo eopkg install remmina
+
+
+# install virtualbox

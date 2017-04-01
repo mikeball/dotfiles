@@ -1,9 +1,7 @@
-A Path to Solus for the Everyday Windows and Mac user
-  * a path to solus for the .net developer
+Solus Install
 
 
 . move bar to bottom of screen
-. install chrome
 . hide search box in firefox
 . install vimfx in firefox
 . install red-shift
@@ -31,15 +29,6 @@ A Path to Solus for the Everyday Windows and Mac user
 
 
 
-# Natifier - https://github.com/jiahaog/nativefier
-   * on error error while loading shared libraries: libgconf-2.so.4
-     fix with: sudo eopkg it gconf
-
-
-# Gmail install as native browser app
-
-
-
 # Install Chrome - https://wiki.solus-project.com/Chrome
   * needed for gotomeeting on linux
   location: /var/eopkg/google-chrome-unstable-54.0.2824.0-51/install/opt/google/chrome-unstable/google-chrome
@@ -49,10 +38,9 @@ A Path to Solus for the Everyday Windows and Mac user
 
 
 # how to create a shortcut/launcher?
-  
-  install menulibre
-  it's called "Menu Editor"
-  create new item
+install menulibre
+it's called "Menu Editor"
+create new item
 
 
 
@@ -62,21 +50,6 @@ A Path to Solus for the Everyday Windows and Mac user
 # how to add copy paste keyboard shortcuts to the terminal?
 
 
-
-# Password Safe? KeepassX alternative?
-  keepassx seems to work quite well, though it would be awesome to have a 
-     keepass compatible version tailored for Solus
-
-
-
-# How to use remote desktop
-  reccomended solutions
-  - Remmina 
-  - use remote desktop from inside a windows VM
-
-    install Vinagre (do we also need to install freerdp first?)
-	it's call remote desktop viewer in the menu
-  works acceptably.
 
 
 
@@ -158,67 +131,6 @@ A Path to Solus for the Everyday Windows and Mac user
 
 
 
-# Installing Virtual box Solus Host(https://wiki.solus-project.com/VirtualBox)
-  sudo eopkg it -c system.devel
-  sudo eopkg it kernel-headers
-  ... needed to reboot for kernel heades to be found?
-  sudo sh ~/Downloads/VirtualBox-5.1.4-110228-Linux_amd64.run
-
-
-
-
-
-  after major kernel updates, you will need to re-install virtualbox, 
-  and also reinstall/compile guest additions
-
-
-
-
-  # Trying out windows in a VM as guest
-  download https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/
-  ... file is too large for standard zip tool, need different zip tool.
-  install p7zip
-
-  7z e MSEdge.Win10_preview.VirtualBox.zip
-  
-  you should get a MSEdge.Win10_preview.VirtualBox.ova file
-  how to disable "pretty" features in windows for better performance
-  
-
-
-
-
-# VirtualBox Solus Guest
-
-
-  if you can't access shared folders...
-	usermod -a -G vboxsf username
-	sudo chmod -R 755 /media
-
-
-  If kernel updates, you need to re-install guest additions
-  
-  cd /run/media/{user}/VBOXADDITIONS_5.1.14_112924/
-  sudo ./VBoxLinuxAdditions.run
-  
-
-
-
-
-# Installing Docker
-  install docker from Software Center
-  you should be able to get the docker version
-    docker --version
-
-  if you attempt to use docker you likely will see this error
-    "Cannot connect to the Docker daemon. Is the docker daemon running on this host?"
-
-  to resolve this add your user to the docker group
-    sudo usermod -aG docker mike
-  
-  you then need to re-boot for change to take effect.
-    simply logging out and then logging in doesn't seem to work
-
 
 
 # Installing / Upgrading VS Code (no auto upgrades on linux unfortunately)
@@ -235,15 +147,11 @@ A Path to Solus for the Everyday Windows and Mac user
 
 
 # Installing / IntelliJ IDEA
-
-  Download community linux version 
-
-  extract to opt
+  Download community linux version, extract to opt
   
   tar -xvf ideaIU-163.9166.20.tar.gz
   sudo cp /opt
   
-
   Create menu item 
     pointing to /opt/
     with icon /opt/VSCode-linux-x64/resources/app/resources/linux/code.png
@@ -251,13 +159,6 @@ A Path to Solus for the Everyday Windows and Mac user
 
 
 
-
-
-
-
-
-# Podcast app to replace iTunes
-  install Vocal in the Software Center
 
 
 
@@ -273,52 +174,12 @@ Install LightTable
 
 
 
-# Prepare Solus as dotnet workstation
 
 
 
 
 
 
-
-
-
-# Prep Solus as Dev Workstation
-
-
-### install postgres for dev work
-
-
-create postgres user and set password
-sudo passwd postgres
-cat /etc/passwd
-sudo passwd postgres
-
-
-create the db data/config directory
-
-sudo mkdir /usr/local/pgsql
-sudo chown postgres /usr/local/pgsql
-
-
-initialize the database(cluster) config
-su postgres
-initdb -D /usr/local/pgsql/data
-
-
-start postgres server as user postgres
-su postgres
-postgres -D /usr/local/pgsql/data
-
-
-from a different terminal setup your user for everyday use
-su postgres
-psql
-create database mike with owner mike encoding 'UTF8';
-create role mike with password 'password';
-alter role "mike" with login createdb createrole;
-
-  
 
 
 
