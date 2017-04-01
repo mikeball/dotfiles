@@ -1,7 +1,19 @@
 
 # install google chrome(dev) - use third party
 
+
+
+# install git
+sudo eopkg install git
+
+# configure git to remember logins for 24 hours
+git config --global credential.helper 'cache --timeout=86400'
+
+
+
 # install fonts source code pro
+
+
 
 
 
